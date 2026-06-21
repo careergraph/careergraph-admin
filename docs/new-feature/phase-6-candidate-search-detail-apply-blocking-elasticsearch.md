@@ -66,5 +66,5 @@ Phase 6 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md` và reports Phase 1-6. Thực hiện Phase 7 only: hardening, tests, validation, polish, production UX. Audit backend authorization, race conditions, error messages, ES rollback behavior, admin/HR/candidate UX, responsive layout, and documentation. Run relevant Maven/frontend tests/builds. Fix scoped bugs only. Báo cáo final theo template.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md` và reports Phase 1-6. Thực hiện Phase 7 only: hardening, tests, validation, polish, production UX. Audit backend authorization, race conditions, error messages, ES rollback behavior, admin/HR/candidate UX, responsive layout, and documentation. Run relevant Maven/frontend tests/builds. Fix scoped bugs only. Báo cáo final theo template.
 ```

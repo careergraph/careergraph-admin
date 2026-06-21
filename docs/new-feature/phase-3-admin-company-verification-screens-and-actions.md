@@ -69,5 +69,5 @@ Phase 3 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md` và reports Phase 1-3. Thực hiện Phase 4 only trong `careergraph-hr`: hiển thị trạng thái xác thực, chặn tạo job khi chưa APPROVED hoặc công ty bị BLOCKED/SUSPENDED, thêm route/form gửi và bổ sung hồ sơ xác thực, CTA đúng copy yêu cầu. Đọc `careergraph-hr/src/App.tsx`, `services/companyService.ts`, `services/jobService.ts`, `pages/Job/AddJob.tsx`, `layout/AppSidebar.tsx`, auth store trước khi sửa. Backend guard đã có, nhưng UI phải rõ ràng. Chạy build/lint nếu khả thi. Báo cáo theo template.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md` và reports Phase 1-3. Thực hiện Phase 4 only trong `careergraph-hr`: hiển thị trạng thái xác thực, chặn tạo job khi chưa APPROVED hoặc công ty bị BLOCKED/SUSPENDED, thêm route/form gửi và bổ sung hồ sơ xác thực, CTA đúng copy yêu cầu. Đọc `careergraph-hr/src/App.tsx`, `services/companyService.ts`, `services/jobService.ts`, `pages/Job/AddJob.tsx`, `layout/AppSidebar.tsx`, auth store trước khi sửa. Backend guard đã có, nhưng UI phải rõ ràng. Chạy build/lint nếu khả thi. Báo cáo theo template lưu ở careergraph-admin\docs\new-feature\report..
 ```

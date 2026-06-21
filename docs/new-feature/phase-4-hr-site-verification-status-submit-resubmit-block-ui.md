@@ -69,5 +69,5 @@ Phase 4 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md` và reports Phase 1-4. Thực hiện Phase 5 only: hoàn thiện notification integration cho admin company verification/block events qua notification system hiện có. Đọc `NotificationServiceImpl`, `SocketNotificationPusher`, `careergraph-rtc/src/notify.js`, HR/client notification contexts/dropdowns trước khi sửa. Không tạo hệ thống notification mới. Thêm type metadata trên HR nếu cần, verify realtime push and REST unread. Báo cáo theo template.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md` và reports Phase 1-4. Thực hiện Phase 5 only: hoàn thiện notification integration cho admin company verification/block events qua notification system hiện có. Đọc `NotificationServiceImpl`, `SocketNotificationPusher`, `careergraph-rtc/src/notify.js`, HR/client notification contexts/dropdowns trước khi sửa. Không tạo hệ thống notification mới. Thêm type metadata trên HR nếu cần, verify realtime push and REST unread. Báo cáo theo template lưu ở careergraph-admin\docs\new-feature\report..
 ```

@@ -1,0 +1,27 @@
+Phase 3 Report
+- Screens added:
+  - Live verification queue in `careergraph-admin/src/features/company-verification/pages/VerificationQueuePage.tsx`
+  - Verification detail workspace with moderation actions in `careergraph-admin/src/features/company-verification/pages/VerificationDetailPage.tsx`
+  - Company control page with block/unblock entry points in `careergraph-admin/src/features/companies/pages/CompanyDetailPage.tsx`
+  - Shared moderation/document components:
+    - `src/features/company-verification/components/DecisionDialog.tsx`
+    - `src/features/company-verification/components/DocumentViewer.tsx`
+    - `src/features/company-verification/components/VerificationSummaryPanel.tsx`
+- API integration:
+  - Wired queue/detail reads to `/admin/company-verification-requests`
+  - Wired approve, reject, request-additional-info actions
+  - Wired company block and unblock actions
+  - Added queue query typing and moderation payload typing in `src/features/company-verification/types/index.ts`
+- Actions verified:
+  - Frontend validation enforces required note/reason for reject, request-info, block, and unblock
+  - Approve supports optional note
+  - Queue and detail queries are invalidated/refreshed after moderation actions
+  - Document preview supports image and PDF, with graceful fallback for unsupported file types
+- Build/test results:
+  - Could not run `lint` or `build` in this environment because `node`, `npm`, `yarn`, and `corepack` are not available in PATH as of 2026-06-21
+- Known gaps:
+  - No toast system exists yet, so action success/error feedback is limited to refetched UI state
+  - `GET /admin/companies/{companyId}` is still not available from Phase 1 backend, so company detail is hydrated from verification detail context via `requestId`
+  - Backend unblock endpoint currently requires non-empty `note`, so UI enforces that contract even though the original plan described it as optional
+- Next phase:
+  - Phase 4: implement HR verification status, submit/resubmit flow, and job creation gate in `careergraph-hr`

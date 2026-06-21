@@ -61,5 +61,5 @@ Phase 5 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md` và reports Phase 1-5. Thực hiện Phase 6 only: candidate job search/detail/apply blocking + Elasticsearch handling. Đọc `JobServiceImpl`, `JobRepository`, `JobES`, `JobESServiceImpl`, `ElasticsearchDataInitializer`, client `JobService`, `JobsList`, `JobDetail`, `ApplyDialog` trước khi sửa. Implement non-destructive ES fields/filter approach if Phase 1 did not finish it. Ensure backend blocks, UI only improves UX. Add tests where practical. Báo cáo theo template.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md` và reports Phase 1-5. Thực hiện Phase 6 only: candidate job search/detail/apply blocking + Elasticsearch handling. Đọc `JobServiceImpl`, `JobRepository`, `JobES`, `JobESServiceImpl`, `ElasticsearchDataInitializer`, client `JobService`, `JobsList`, `JobDetail`, `ApplyDialog` trước khi sửa. Implement non-destructive ES fields/filter approach if Phase 1 did not finish it. Ensure backend blocks, UI only improves UX. Add tests where practical. Báo cáo theo template lưu ở careergraph-admin\docs\new-feature\report..
 ```

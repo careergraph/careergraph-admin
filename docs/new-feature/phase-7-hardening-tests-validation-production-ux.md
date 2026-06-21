@@ -67,5 +67,5 @@ Phase 7 Final Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md` và all phase reports. The main implementation should be complete. Perform a production readiness review only: inspect diffs, run tests/builds, identify bugs/risks with file references, and fix only small scoped issues explicitly needed for readiness. Do not introduce new major features.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md` và all phase reports. The main implementation should be complete. Perform a production readiness review only: inspect diffs, run tests/builds, identify bugs/risks with file references, and fix only small scoped issues explicitly needed for readiness. Do not introduce new major features.
 ```

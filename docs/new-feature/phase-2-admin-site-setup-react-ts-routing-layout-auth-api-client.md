@@ -73,5 +73,5 @@ Phase 2 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer. Đọc `/careergraph-admin-company-verification-plan.md`, Phase 1 report, Phase 2 report, rồi thực hiện Phase 3 only. Build admin company verification screens and actions inside `/careergraph-admin`: verification queue, detail, document viewer, approve/reject/request-info dialogs, company block/unblock entry points. Đọc backend API DTOs đã tạo ở Phase 1 trước khi code. Enterprise UI, no marketing page. Chạy build/lint nếu có. Báo cáo theo template.
+Bạn là senior full-stack engineer. Đọc `/00-source-reading-and-architecture-overview.md`, Phase 1 report, Phase 2 report, rồi thực hiện Phase 3 only. Build admin company verification screens and actions inside `/careergraph-admin`: verification queue, detail, document viewer, approve/reject/request-info dialogs, company block/unblock entry points. Đọc backend API DTOs đã tạo ở Phase 1 trước khi code. Enterprise UI, no marketing page. Chạy build/lint nếu có. Báo cáo theo template lưu ở careergraph-admin\docs\new-feature\report..
 ```

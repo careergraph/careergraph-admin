@@ -1,0 +1,97 @@
+# Phase 1 Report
+
+- Backend files changed:
+  - Added company verification/backend foundation in `careergraph-api`:
+    - `src/main/java/com/hcmute/careergraph/enums/company/CompanyOperationalStatus.java`
+    - `src/main/java/com/hcmute/careergraph/enums/company/CompanyVerificationStatus.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/models/Company.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/models/CompanyVerificationRequest.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/models/CompanyVerificationDocument.java`
+    - `src/main/java/com/hcmute/careergraph/repositories/CompanyVerificationRequestRepository.java`
+    - `src/main/java/com/hcmute/careergraph/repositories/CompanyVerificationDocumentRepository.java`
+  - Added DTOs/controllers/services:
+    - `src/main/java/com/hcmute/careergraph/persistence/dtos/request/CompanyVerificationRequests.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/dtos/response/CompanyVerificationResponses.java`
+    - `src/main/java/com/hcmute/careergraph/controllers/CompanyVerificationController.java`
+    - `src/main/java/com/hcmute/careergraph/controllers/AdminCompanyController.java`
+    - `src/main/java/com/hcmute/careergraph/services/CompanyAccessPolicyService.java`
+    - `src/main/java/com/hcmute/careergraph/services/CompanyVerificationService.java`
+    - `src/main/java/com/hcmute/careergraph/services/AdminCompanyVerificationService.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/CompanyAccessPolicyServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/CompanyVerificationMapperSupport.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/CompanyVerificationServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/AdminCompanyVerificationServiceImpl.java`
+  - Integrated existing flows:
+    - `src/main/java/com/hcmute/careergraph/services/impl/AuthServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/services/JobService.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/JobServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/ApplicationServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/controllers/JobController.java`
+    - `src/main/java/com/hcmute/careergraph/controllers/CompanyController.java`
+    - `src/main/java/com/hcmute/careergraph/mapper/CompanyMapper.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/dtos/response/CompanyResponse.java`
+    - `src/main/java/com/hcmute/careergraph/repositories/JobRepository.java`
+  - Extended notifications/search:
+    - `src/main/java/com/hcmute/careergraph/enums/notification/NotificationType.java`
+    - `src/main/java/com/hcmute/careergraph/services/NotificationService.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/NotificationServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/persistence/documents/JobES.java`
+    - `src/main/java/com/hcmute/careergraph/services/impl/JobESServiceImpl.java`
+    - `src/main/java/com/hcmute/careergraph/config/app/ElasticsearchDataInitializer.java`
+  - Added backend tests:
+    - `src/test/java/com/hcmute/careergraph/services/impl/ApplicationServiceImplTest.java`
+    - `src/test/java/com/hcmute/careergraph/services/impl/AuthServiceImplTest.java`
+    - `src/test/java/com/hcmute/careergraph/services/impl/AdminCompanyVerificationServiceImplTest.java`
+    - updated `src/test/java/com/hcmute/careergraph/services/impl/JobServiceImplTest.java`
+
+- DB/model changes:
+  - Added `CompanyVerificationStatus` and `CompanyOperationalStatus`
+  - Added company-level verification state, operational state, tax/legal/business info, review audit fields, block/unblock audit fields
+  - Added `company_verification_requests` and `company_verification_documents`
+  - Added SQL script:
+    - `careergraph-api/init-scripts/2026-06-21-company-verification-phase1.sql`
+
+- New APIs:
+  - HR:
+    - `GET /companies/me/verification`
+    - `POST /companies/me/verification`
+    - `PUT /companies/me/verification/{requestId}`
+  - Admin:
+    - `GET /admin/company-verification-requests`
+    - `GET /admin/company-verification-requests/{requestId}`
+    - `POST /admin/company-verification-requests/{requestId}/approve`
+    - `POST /admin/company-verification-requests/{requestId}/reject`
+    - `POST /admin/company-verification-requests/{requestId}/request-additional-info`
+    - `POST /admin/companies/{companyId}/block`
+    - `POST /admin/companies/{companyId}/unblock`
+
+- Guards added:
+  - HR company must be `APPROVED` and `ACTIVE` before create/publish/activate job, and before setting job status to `ACTIVE`
+  - Candidate apply now rejects blocked/unverified company jobs
+  - Public job detail/list/company jobs/search flows now enforce company visibility
+  - Admin APIs enforce server-side admin guard via `SecurityUtils`
+
+- Notification changes:
+  - Added notification types:
+    - `COMPANY_VERIFICATION_APPROVED`
+    - `COMPANY_VERIFICATION_REJECTED`
+    - `COMPANY_VERIFICATION_NEEDS_INFO`
+    - `COMPANY_BLOCKED`
+    - `COMPANY_UNBLOCKED`
+  - Added backend notification methods and HR-recipient dispatch
+  - Updated SQL check constraints for notification type enums
+
+- Tests run:
+  - `mvn -q -DskipTests compile`
+  - `mvn -q "-Dtest=JobServiceImplTest,ApplicationServiceImplTest,AuthServiceImplTest,AdminCompanyVerificationServiceImplTest" test`
+  - Targeted Phase 1 tests passed
+
+- Known gaps:
+  - Full `mvn -q test` for the whole repo is not green because of unrelated existing tests outside Phase 1 scope:
+    - `CareergraphApplicationTests` loads a broader Spring context against H2 and hits missing schema/scheduler tables
+    - existing `InterviewServiceImplTest` also fails outside this Phase 1 scope
+  - Did not scaffold `careergraph-admin`
+  - ES resource mapping JSON files were not separately edited; new ES fields were added at document/service/indexing layer in Phase 1
+
+- Next phase:
+  - Phase 2: scaffold `careergraph-admin` foundation only, per the plan, without building detailed verification screens yet

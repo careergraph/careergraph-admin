@@ -30,7 +30,7 @@ Read relevant source code and create this architecture/implementation plan witho
 
 ### Acceptance criteria
 
-- Plan file exists at `/careergraph-admin-company-verification-plan.md`.
+- Plan file exists at `/00-source-reading-and-architecture-overview.md`.
 - No product code is changed.
 - Plan includes all requested sections.
 - Each phase includes goal, files/modules, tasks, acceptance criteria, manual checklist, report template, and master prompt.
@@ -56,5 +56,5 @@ Phase 0 Report
 ### Master Prompt for next phase
 
 ```
-Bạn là senior full-stack engineer trong workspace CareerGraph. Hãy đọc `/ 00-source-reading-and-architecture-overview.md` trước, sau đó thực hiện Phase 1 only. Không scaffold admin site trong Phase 1. Đọc lại source backend liên quan trước khi sửa: Company, Account, Job, AuthServiceImpl, JobServiceImpl, ApplicationServiceImpl, NotificationServiceImpl, JobES/JobESService/ElasticsearchDataInitializer, SecurityUtils/SecurityConfig, repositories. Triển khai backend DB model, migration/init SQL nếu project dùng, enums, DTOs, repositories, core admin/HR verification APIs, guards tạo/publish job/apply job, notification type/service method stubs nếu thuộc Phase 1. Tôn trọng existing patterns, thêm tests backend phù hợp, chạy Maven tests liên quan. Báo cáo theo template trong plan.
+Bạn là senior full-stack engineer trong workspace CareerGraph. Hãy đọc `/ 00-source-reading-and-architecture-overview.md` trước, sau đó thực hiện Phase 1 only. Không scaffold admin site trong Phase 1. Đọc lại source backend liên quan trước khi sửa: Company, Account, Job, AuthServiceImpl, JobServiceImpl, ApplicationServiceImpl, NotificationServiceImpl, JobES/JobESService/ElasticsearchDataInitializer, SecurityUtils/SecurityConfig, repositories. Triển khai backend DB model, migration/init SQL nếu project dùng, enums, DTOs, repositories, core admin/HR verification APIs, guards tạo/publish job/apply job, notification type/service method stubs nếu thuộc Phase 1. Tôn trọng existing patterns, thêm tests backend phù hợp, chạy Maven tests liên quan. Báo cáo theo template lưu ở careergraph-admin\docs\new-feature\report. trong plan.
 ```
