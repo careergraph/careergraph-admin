@@ -8,67 +8,79 @@ type VerificationSummaryPanelProps = {
 };
 
 const formatDateTime = (value: string | null) => {
-  if (!value) {
-    return "Not available";
-  }
-
-  return new Intl.DateTimeFormat("en-GB", {
+  if (!value) return "Không có dữ liệu";
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
 };
 
 const detailRows = [
-  { key: "taxCode", label: "Tax code" },
-  { key: "legalRepresentativeName", label: "Legal representative" },
-  { key: "businessEmail", label: "Business email" },
+  { key: "taxCode", label: "Mã số thuế" },
+  { key: "legalRepresentativeName", label: "Người đại diện pháp lý" },
+  { key: "businessEmail", label: "Email doanh nghiệp" },
   { key: "website", label: "Website" },
 ] as const;
 
-export function VerificationSummaryPanel({
-  detail,
-}: VerificationSummaryPanelProps) {
+export function VerificationSummaryPanel({ detail }: VerificationSummaryPanelProps) {
   return (
     <SurfaceCard>
-      <div className="panel-title-row">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="muted-label">Company snapshot</p>
-          <h3>{detail.companyName}</h3>
+          <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+            Ảnh chụp công ty
+          </p>
+          <h3 className="text-lg font-bold mt-0.5">{detail.companyName}</h3>
         </div>
-        <div className="stack-sm status-stack">
+        <div className="flex flex-col gap-1.5 items-end shrink-0">
           <StatusBadge status={detail.verificationStatus} />
           <StatusBadge status={detail.operationalStatus} />
         </div>
       </div>
 
-      <div className="description-list">
+      <dl className="grid gap-3.5">
         {detailRows.map((row) => (
-          <div key={row.key} className="description-row">
-            <dt>{row.label}</dt>
-            <dd>{detail[row.key] || "Not provided"}</dd>
+          <div
+            key={row.key}
+            className="grid grid-cols-[minmax(140px,180px)_minmax(0,1fr)] gap-4
+              pb-3 border-b border-[rgba(142,160,186,0.11)]"
+          >
+            <dt className="text-[#90a1bb] text-sm">{row.label}</dt>
+            <dd className="m-0 text-sm">{detail[row.key] ?? "Chưa cung cấp"}</dd>
           </div>
         ))}
-        <div className="description-row">
-          <dt>HR email</dt>
-          <dd>{detail.hrEmail || "Not provided"}</dd>
+        <div
+          className="grid grid-cols-[minmax(140px,180px)_minmax(0,1fr)] gap-4
+            pb-3 border-b border-[rgba(142,160,186,0.11)]"
+        >
+          <dt className="text-[#90a1bb] text-sm">Email HR</dt>
+          <dd className="m-0 text-sm">{detail.hrEmail ?? "Chưa cung cấp"}</dd>
         </div>
-        <div className="description-row">
-          <dt>Submitted</dt>
-          <dd>{formatDateTime(detail.submittedAt)}</dd>
+        <div
+          className="grid grid-cols-[minmax(140px,180px)_minmax(0,1fr)] gap-4
+            pb-3 border-b border-[rgba(142,160,186,0.11)]
+            max-[720px]:grid-cols-1 max-[720px]:gap-1"
+        >
+          <dt className="text-[#90a1bb] text-sm">Ngày nộp</dt>
+          <dd className="m-0 text-sm">{formatDateTime(detail.submittedAt)}</dd>
         </div>
-        <div className="description-row">
-          <dt>Reviewed</dt>
-          <dd>{formatDateTime(detail.reviewedAt)}</dd>
+        <div
+          className="grid grid-cols-[minmax(140px,180px)_minmax(0,1fr)] gap-4
+            pb-3 border-b border-[rgba(142,160,186,0.11)]
+            max-[720px]:grid-cols-1 max-[720px]:gap-1"
+        >
+          <dt className="text-[#90a1bb] text-sm">Ngày review</dt>
+          <dd className="m-0 text-sm">{formatDateTime(detail.reviewedAt)}</dd>
         </div>
-      </div>
+      </dl>
 
-      <div className="inline-actions">
+      <div>
         <Link
-          className="inline-link"
+          className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
           to={`/companies/${detail.companyId}?requestId=${detail.requestId}`}
           state={{ verificationDetail: detail }}
         >
-          Open company control
+          Mở kiểm soát công ty
         </Link>
       </div>
     </SurfaceCard>

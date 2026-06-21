@@ -12,10 +12,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge";
 import { Button } from "@/shared/components/ui/Button";
 
 const formatDateTime = (value: string | null) => {
-  if (!value) {
-    return "Chưa có";
-  }
-
+  if (!value) return "Chưa có";
   return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -29,8 +26,9 @@ export function CompanyDetailPage() {
   const queryClient = useQueryClient();
   const [activeDialog, setActiveDialog] = useState<"block" | "unblock" | null>(null);
   const requestId = searchParams.get("requestId") ?? "";
-  const stateDetail = (location.state as { verificationDetail?: VerificationRequestDetail } | null)
-    ?.verificationDetail;
+  const stateDetail = (
+    location.state as { verificationDetail?: VerificationRequestDetail } | null
+  )?.verificationDetail;
 
   const detailQuery = useQuery({
     enabled: Boolean(requestId),
@@ -69,69 +67,62 @@ export function CompanyDetailPage() {
   });
 
   const timelineItems = useMemo(() => {
-    if (!detail) {
-      return [];
-    }
-
+    if (!detail) return [];
     return [
-      {
-        label: "Ngày gửi xác thực",
-        value: formatDateTime(detail.submittedAt),
-      },
-      {
-        label: "Lần review gần nhất",
-        value: formatDateTime(detail.reviewedAt),
-      },
-      {
-        label: "Lý do khóa",
-        value: detail.blockReason || "Không có lệnh khóa đang hiệu lực",
-      },
-      {
-        label: "Ghi chú admin",
-        value: detail.adminNote || "Chưa có ghi chú",
-      },
+      { label: "Ngày gửi xác thực", value: formatDateTime(detail.submittedAt) },
+      { label: "Lần review gần nhất", value: formatDateTime(detail.reviewedAt) },
+      { label: "Lý do khóa", value: detail.blockReason ?? "Không có lệnh khóa đang hiệu lực" },
+      { label: "Ghi chú admin", value: detail.adminNote ?? "Chưa có ghi chú" },
     ];
   }, [detail]);
 
   return (
-    <div className="page-stack">
+    <div className="flex flex-col gap-5">
       <PageHeader
         eyebrow="Công ty"
-        title={detail?.companyName || "Kiểm soát doanh nghiệp"}
+        title={detail?.companyName ?? "Kiểm soát doanh nghiệp"}
         description="Điều khiển vận hành để khóa, mở khóa và xem bối cảnh xác thực mới nhất của doanh nghiệp."
       />
 
-      <div className="two-column-grid">
+      <div className="grid grid-cols-2 gap-4 max-[1100px]:grid-cols-1">
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Chế tài doanh nghiệp</p>
-              <h3>Trạng thái vận hành</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Chế tài doanh nghiệp
+              </p>
+              <h3 className="text-lg font-bold mt-0.5">Trạng thái vận hành</h3>
             </div>
-            <span className="icon-chip">
+            <span
+              className="inline-grid h-10 w-10 shrink-0 place-items-center rounded-[0.9rem]
+                bg-[rgba(42,78,151,0.3)] text-[#cde0ff]"
+            >
               <ShieldAlert size={18} />
             </span>
           </div>
+
           {detail ? (
-            <div className="stack-sm">
-              <div className="inline-status-row">
+            <div className="flex flex-col gap-2.5">
+              <div className="flex flex-wrap gap-2">
                 <StatusBadge status={detail.operationalStatus} />
                 <StatusBadge status={detail.verificationStatus} />
               </div>
-              <p className="surface-copy">
-                Mã công ty: <span className="mono-text">{companyId}</span>
+              <p className="text-[#aeb9ca] text-sm">
+                Mã công ty:{" "}
+                <span className="font-mono text-[#eff4ff]">{companyId}</span>
               </p>
-              <p className="surface-copy">
-                Lý do khóa hiện tại: {detail.blockReason || "Không có trạng thái khóa"}
+              <p className="text-[#aeb9ca] text-sm">
+                Lý do khóa hiện tại:{" "}
+                {detail.blockReason ?? "Không có trạng thái khóa"}
               </p>
-              <div className="inline-actions">
+              <div className="flex flex-wrap gap-3">
                 {detail.operationalStatus === "BLOCKED" ? (
                   <Button onClick={() => setActiveDialog("unblock")} variant="secondary">
                     <Unlock size={16} />
                     Mở khóa công ty
                   </Button>
                 ) : (
-                  <Button className="button-danger" onClick={() => setActiveDialog("block")}>
+                  <Button variant="danger" onClick={() => setActiveDialog("block")}>
                     <Lock size={16} />
                     Khóa công ty
                   </Button>
@@ -139,12 +130,12 @@ export function CompanyDetailPage() {
               </div>
             </div>
           ) : (
-            <div className="empty-state compact-empty-state">
-              <AlertTriangle size={18} />
+            <div className="grid place-items-center min-h-[140px] text-center gap-2">
+              <AlertTriangle size={18} className="text-[#ff9dad]" />
               <div>
-                <h3>Chưa có ảnh chụp trạng thái công ty.</h3>
-                <p className="surface-copy">
-                  Hãy mở trang này từ một yêu cầu xác thực để nạp ngữ cảnh backend theo request ID.
+                <h3 className="font-semibold">Chưa có ảnh chụp trạng thái công ty.</h3>
+                <p className="text-[#aeb9ca] text-sm mt-1">
+                  Hãy mở trang này từ một yêu cầu xác thực để nạp ngữ cảnh backend.
                 </p>
               </div>
             </div>
@@ -152,51 +143,56 @@ export function CompanyDetailPage() {
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Ảnh chụp mới nhất</p>
-              <h3>Tóm tắt công ty</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Ảnh chụp mới nhất
+              </p>
+              <h3 className="text-lg font-bold mt-0.5">Tóm tắt công ty</h3>
             </div>
-            <span className="icon-chip">
+            <span
+              className="inline-grid h-10 w-10 shrink-0 place-items-center rounded-[0.9rem]
+                bg-[rgba(42,78,151,0.3)] text-[#cde0ff]"
+            >
               <Building2 size={18} />
             </span>
           </div>
+
           {detail ? (
-            <div className="description-list">
-              <div className="description-row">
-                <dt>Email HR</dt>
-                <dd>{detail.hrEmail || "Chưa cung cấp"}</dd>
-              </div>
-              <div className="description-row">
-                <dt>Mã số thuế</dt>
-                <dd>{detail.taxCode || "Chưa cung cấp"}</dd>
-              </div>
-              <div className="description-row">
-                <dt>Người đại diện pháp lý</dt>
-                <dd>{detail.legalRepresentativeName || "Chưa cung cấp"}</dd>
-              </div>
-              <div className="description-row">
-                <dt>Email doanh nghiệp</dt>
-                <dd>{detail.businessEmail || "Chưa cung cấp"}</dd>
-              </div>
-              <div className="description-row">
-                <dt>Website</dt>
-                <dd>{detail.website || "Chưa cung cấp"}</dd>
-              </div>
-            </div>
+            <dl className="grid gap-3.5">
+              {[
+                { label: "Email HR", value: detail.hrEmail },
+                { label: "Mã số thuế", value: detail.taxCode },
+                { label: "Người đại diện pháp lý", value: detail.legalRepresentativeName },
+                { label: "Email doanh nghiệp", value: detail.businessEmail },
+                { label: "Website", value: detail.website },
+              ].map((row) => (
+                <div
+                  key={row.label}
+                  className="grid grid-cols-[minmax(140px,180px)_minmax(0,1fr)] gap-4
+                    pb-3 border-b border-[rgba(142,160,186,0.11)]
+                    max-[720px]:grid-cols-1 max-[720px]:gap-1"
+                >
+                  <dt className="text-[#90a1bb] text-sm">{row.label}</dt>
+                  <dd className="m-0 text-sm">{row.value ?? "Chưa cung cấp"}</dd>
+                </div>
+              ))}
+            </dl>
           ) : detailQuery.isLoading || companyDetailQuery.isLoading ? (
-            <div className="empty-state">
-              <h3>Đang tải ảnh chụp công ty...</h3>
-              <p className="surface-copy">
-                Hệ thống đang nạp ngữ cảnh kiểm duyệt mới nhất gắn với doanh nghiệp.
+            <div className="grid place-items-center min-h-[220px] text-center gap-2">
+              <h3 className="font-semibold">Đang tải ảnh chụp công ty...</h3>
+              <p className="text-[#aeb9ca] text-sm">
+                Hệ thống đang nạp ngữ cảnh kiểm duyệt mới nhất.
               </p>
             </div>
           ) : detailQuery.isError && companyDetailQuery.isError ? (
-            <div className="empty-state compact-empty-state">
-              <AlertTriangle size={18} />
+            <div className="grid place-items-center min-h-[140px] text-center gap-2">
+              <AlertTriangle size={18} className="text-[#ff9dad]" />
               <div>
-                <h3>Không thể tải thông tin công ty.</h3>
-                <p className="surface-copy">Vui lòng tải lại trang hoặc mở lại từ danh sách công ty.</p>
+                <h3 className="font-semibold">Không thể tải thông tin công ty.</h3>
+                <p className="text-[#aeb9ca] text-sm mt-1">
+                  Vui lòng tải lại trang hoặc mở lại từ danh sách công ty.
+                </p>
               </div>
             </div>
           ) : null}
@@ -205,19 +201,25 @@ export function CompanyDetailPage() {
 
       {detail ? (
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Dòng thời gian kiểm duyệt</p>
-              <h3>Ngữ cảnh vận hành gần nhất</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Dòng thời gian kiểm duyệt
+              </p>
+              <h3 className="text-lg font-bold mt-0.5">Ngữ cảnh vận hành gần nhất</h3>
             </div>
           </div>
-          <div className="timeline-list">
+          <div className="grid gap-3.5">
             {timelineItems.map((item) => (
-              <div key={item.label} className="timeline-item">
-                <div className="timeline-dot" />
+              <div key={item.label} className="grid grid-cols-[18px_minmax(0,1fr)] gap-3">
+                <div
+                  className="w-3 h-3 mt-1 rounded-full shrink-0
+                    bg-gradient-to-br from-[#4372f0] to-[#1d9a8b]
+                    shadow-[0_0_0_6px_rgba(67,114,240,0.12)]"
+                />
                 <div>
-                  <p className="timeline-title">{item.label}</p>
-                  <p className="surface-copy">{item.value}</p>
+                  <p className="font-bold text-sm">{item.label}</p>
+                  <p className="text-[#aeb9ca] text-sm mt-0.5">{item.value}</p>
                 </div>
               </div>
             ))}
@@ -226,46 +228,65 @@ export function CompanyDetailPage() {
       ) : null}
 
       <SurfaceCard>
-        <div className="panel-title-row">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="muted-label">Lịch sử công ty</p>
-            <h3>Các yêu cầu xác thực</h3>
+            <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+              Lịch sử công ty
+            </p>
+            <h3 className="text-lg font-bold mt-0.5">Các yêu cầu xác thực</h3>
           </div>
         </div>
+
         {historyQuery.isLoading ? (
-          <div className="empty-state">
-            <h3>Đang tải lịch sử xác thực...</h3>
-            <p className="surface-copy">Hệ thống đang lấy toàn bộ yêu cầu của công ty này.</p>
+          <div className="grid place-items-center min-h-[220px] text-center gap-2">
+            <h3 className="font-semibold">Đang tải lịch sử xác thực...</h3>
+            <p className="text-[#aeb9ca] text-sm">
+              Hệ thống đang lấy toàn bộ yêu cầu của công ty này.
+            </p>
           </div>
         ) : historyQuery.isError ? (
-          <div className="empty-state compact-empty-state">
-            <AlertTriangle size={18} />
+          <div className="grid place-items-center min-h-[140px] text-center gap-2">
+            <AlertTriangle size={18} className="text-[#ff9dad]" />
             <div>
-              <h3>Tải lịch sử xác thực thất bại.</h3>
-              <p className="surface-copy">Vui lòng thử lại hoặc làm mới trang sau ít phút.</p>
+              <h3 className="font-semibold">Tải lịch sử xác thực thất bại.</h3>
+              <p className="text-[#aeb9ca] text-sm mt-1">
+                Vui lòng thử lại hoặc làm mới trang sau ít phút.
+              </p>
             </div>
           </div>
         ) : historyQuery.data && historyQuery.data.length > 0 ? (
-          <div className="table-shell">
-            <table className="data-table">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th>Ngày gửi</th>
-                  <th>Trạng thái</th>
-                  <th>Ghi chú admin</th>
-                  <th>Thao tác</th>
+                  {["Ngày gửi", "Trạng thái", "Ghi chú admin", "Thao tác"].map((h) => (
+                    <th
+                      key={h}
+                      className="py-[0.95rem] px-3 text-left border-b border-[rgba(142,160,186,0.11)]
+                        text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em] font-semibold"
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {historyQuery.data.map((request) => (
-                  <tr key={request.requestId}>
-                    <td>{formatDateTime(request.submittedAt)}</td>
-                    <td>
+                  <tr key={request.requestId} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] text-sm text-[#aeb9ca]">
+                      {formatDateTime(request.submittedAt)}
+                    </td>
+                    <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)]">
                       <StatusBadge status={request.verificationStatus} />
                     </td>
-                    <td>{request.adminNote || "—"}</td>
-                    <td>
-                      <Link className="inline-link" to={`/verification/${request.requestId}`}>
+                    <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] text-sm text-[#aeb9ca]">
+                      {request.adminNote ?? "—"}
+                    </td>
+                    <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)]">
+                      <Link
+                        className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
+                        to={`/verification/${request.requestId}`}
+                      >
                         Xem chi tiết <ArrowRight size={14} />
                       </Link>
                     </td>
@@ -275,19 +296,23 @@ export function CompanyDetailPage() {
             </table>
           </div>
         ) : (
-          <div className="empty-state">
-            <h3>Chưa tìm thấy yêu cầu xác thực nào.</h3>
-            <p className="surface-copy">Công ty này hiện chưa gửi bất kỳ yêu cầu xác thực nào.</p>
+          <div className="grid place-items-center min-h-[220px] text-center gap-2">
+            <h3 className="font-semibold">Chưa tìm thấy yêu cầu xác thực nào.</h3>
+            <p className="text-[#aeb9ca] text-sm">
+              Công ty này hiện chưa gửi bất kỳ yêu cầu xác thực nào.
+            </p>
           </div>
         )}
       </SurfaceCard>
 
       <DecisionDialog
         confirmLabel="Xác nhận khóa"
-        description="Khóa công ty sẽ ngay lập tức chặn các vận hành đã được duyệt. Backend hiện yêu cầu bắt buộc phải có lý do."
+        description="Khóa công ty sẽ ngay lập tức chặn các vận hành đã được duyệt. Backend yêu cầu bắt buộc phải có lý do."
         loading={companyMutation.isPending && activeDialog === "block"}
         onClose={() => setActiveDialog(null)}
-        onConfirm={(value) => companyMutation.mutateAsync({ action: "block", note: value })}
+        onConfirm={(value) =>
+          companyMutation.mutateAsync({ action: "block", note: value })
+        }
         open={activeDialog === "block"}
         placeholder="Ghi rõ lý do chính sách hoặc tuân thủ khi khóa công ty này."
         title="Khóa công ty"
@@ -296,11 +321,13 @@ export function CompanyDetailPage() {
 
       <DecisionDialog
         confirmLabel="Xác nhận mở khóa"
-        description="Backend hiện yêu cầu ghi chú mở khóa, vì vậy hãy mô tả rõ lý do có thể khôi phục doanh nghiệp."
+        description="Backend yêu cầu ghi chú mở khóa, hãy mô tả rõ lý do khôi phục doanh nghiệp."
         initialValue={detail?.adminNote ?? ""}
         loading={companyMutation.isPending && activeDialog === "unblock"}
         onClose={() => setActiveDialog(null)}
-        onConfirm={(value) => companyMutation.mutateAsync({ action: "unblock", note: value })}
+        onConfirm={(value) =>
+          companyMutation.mutateAsync({ action: "unblock", note: value })
+        }
         open={activeDialog === "unblock"}
         placeholder="Ghi rõ vì sao công ty có thể được khôi phục về trạng thái ACTIVE."
         title="Mở khóa công ty"

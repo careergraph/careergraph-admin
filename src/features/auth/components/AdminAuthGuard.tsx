@@ -25,8 +25,8 @@ export function AdminAuthGuard() {
   if (!hydrated) {
     return (
       <FullScreenState
-        title="Loading session"
-        description="Hydrating admin workspace."
+        title="Đang khởi tạo phiên"
+        description="Đang nạp không gian làm việc quản trị viên."
       />
     );
   }
@@ -62,8 +62,8 @@ export function AdminAuthGuard() {
   if (sessionQuery.isLoading) {
     return (
       <FullScreenState
-        title="Verifying access"
-        description="Checking your admin permissions with the backend."
+        title="Đang xác minh quyền truy cập"
+        description="Đang kiểm tra quyền quản trị viên với backend."
       />
     );
   }

@@ -19,20 +19,30 @@ export function Topbar() {
   };
 
   return (
-    <header className="topbar">
+    <header
+      className="flex items-center justify-between gap-4 px-8 py-5 pb-4
+        border-b border-[rgba(159,174,196,0.1)] backdrop-blur-lg
+        max-[720px]:flex-col max-[720px]:items-start max-[720px]:px-4"
+    >
       <div>
-        <p className="muted-label">Protected workspace</p>
-        <h2>Administrator shell</h2>
+        <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+          Không gian bảo vệ
+        </p>
+        <h2 className="mt-0.5 text-[1.1rem] font-semibold">Shell quản trị viên</h2>
       </div>
 
-      <div className="topbar-actions">
-        <div className="admin-chip">
+      <div className="flex items-center gap-3 max-[720px]:w-full max-[720px]:flex-col max-[720px]:items-stretch">
+        <div
+          className="inline-flex items-center gap-2 px-[0.95rem] py-[0.7rem]
+            border border-[rgba(115,152,228,0.18)] rounded-full
+            bg-[rgba(16,29,51,0.68)] text-[#c9d6eb] text-sm"
+        >
           <Shield size={16} />
-          <span>{admin?.email || "admin"}</span>
+          <span>{admin?.email ?? "admin"}</span>
         </div>
         <Button variant="secondary" onClick={handleLogout}>
           <LogOut size={16} />
-          Sign out
+          Đăng xuất
         </Button>
       </div>
     </header>

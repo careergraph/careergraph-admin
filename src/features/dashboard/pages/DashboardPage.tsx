@@ -43,55 +43,72 @@ export function DashboardPage() {
   ];
 
   return (
-    <div className="page-stack">
+    <div className="flex flex-col gap-5">
       <PageHeader
-        eyebrow="Dashboard"
+        eyebrow="Tổng quan"
         title="Trung tâm điều hành"
-        description={`Đăng nhập với ${admin?.email || "administrator"}. Không gian này sẵn sàng cho hàng đợi xác thực và công cụ kiểm soát doanh nghiệp.`}
+        description={`Đăng nhập với ${admin?.email ?? "quản trị viên"}. Không gian sẵn sàng cho hàng đợi xác thực và công cụ kiểm soát doanh nghiệp.`}
       />
 
-      <section className="stats-grid">
+      <section className="grid grid-cols-4 gap-4 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1">
         {dashboardStats.map((item) => (
           <SurfaceCard key={item.label}>
-            <div className="stat-row">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="muted-label">{item.label}</p>
-                <h3>{item.value}</h3>
+                <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                  {item.label}
+                </p>
+                <h3 className="text-2xl font-bold mt-1">{item.value}</h3>
               </div>
-              <span className="icon-chip">
+              <span
+                className="inline-grid h-10 w-10 shrink-0 place-items-center rounded-[0.9rem]
+                  bg-[rgba(42,78,151,0.3)] text-[#cde0ff]"
+              >
                 <item.icon size={18} />
               </span>
             </div>
-            <p className="surface-copy">{item.hint}</p>
+            <p className="text-[#aeb9ca] text-sm">{item.hint}</p>
           </SurfaceCard>
         ))}
       </section>
 
-      <div className="two-column-grid">
+      <div className="grid grid-cols-2 gap-4 max-[1100px]:grid-cols-1">
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Điểm tích hợp hàng đợi</p>
-              <h3>Tiếp nhận xác thực</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Điểm tích hợp hàng đợi
+              </p>
+              <h3 className="text-lg font-bold mt-0.5">Tiếp nhận xác thực</h3>
             </div>
           </div>
           {summaryQuery.isLoading ? (
-            <p className="surface-copy">Đang tải danh sách chờ xét duyệt...</p>
+            <p className="text-[#aeb9ca] text-sm">Đang tải danh sách chờ xét duyệt...</p>
           ) : summaryQuery.isError ? (
-            <p className="surface-copy">Không thể tải dữ liệu tổng quan từ backend.</p>
+            <p className="text-[#aeb9ca] text-sm">
+              Không thể tải dữ liệu tổng quan từ backend.
+            </p>
           ) : summary?.latestPendingRequests?.length ? (
-            <div className="stack-sm">
+            <div className="flex flex-col gap-2.5">
               {summary.latestPendingRequests.map((request) => (
-                <div key={request.requestId} className="rounded-2xl border border-slate-200/80 p-4">
+                <div
+                  key={request.requestId}
+                  className="rounded-xl border border-[rgba(127,150,186,0.14)] p-4"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="font-medium text-slate-900">{request.companyName}</p>
-                      <p className="surface-copy">{request.hrEmail || "Chưa có email HR"}</p>
+                      <p className="font-medium text-[#dbe4f4]">{request.companyName}</p>
+                      <p className="text-[#aeb9ca] text-sm">
+                        {request.hrEmail ?? "Chưa có email HR"}
+                      </p>
                     </div>
                     <StatusBadge status={request.verificationStatus} />
                   </div>
                   <div className="mt-3">
-                    <Link className="inline-link" to={`/verification/${request.requestId}`}>
+                    <Link
+                      className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
+                      to={`/verification/${request.requestId}`}
+                    >
                       Mở hồ sơ review
                     </Link>
                   </div>
@@ -99,23 +116,30 @@ export function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p className="surface-copy">Hiện không có yêu cầu chờ xét duyệt nào.</p>
+            <p className="text-[#aeb9ca] text-sm">
+              Hiện không có yêu cầu chờ xét duyệt nào.
+            </p>
           )}
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Điểm tích hợp chế tài</p>
-              <h3>Kiểm soát doanh nghiệp</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Điểm tích hợp chế tài
+              </p>
+              <h3 className="text-lg font-bold mt-0.5">Kiểm soát doanh nghiệp</h3>
             </div>
           </div>
-          <p className="surface-copy">
-            Admin có thể mở trang doanh nghiệp để khóa, mở khóa và xem lịch sử xác thực mà
-            không cần đi qua request detail.
+          <p className="text-[#aeb9ca] text-sm">
+            Admin có thể mở trang doanh nghiệp để khóa, mở khóa và xem lịch sử xác
+            thực mà không cần đi qua request detail.
           </p>
-          <div className="mt-3">
-            <Link className="inline-link" to="/companies">
+          <div>
+            <Link
+              className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
+              to="/companies/company-control"
+            >
               Mở trung tâm quản lý công ty
             </Link>
           </div>

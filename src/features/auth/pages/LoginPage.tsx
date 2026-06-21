@@ -10,8 +10,8 @@ import { Input } from "@/shared/components/ui/Input";
 import { env } from "@/config/env";
 
 const loginSchema = z.object({
-  email: z.email("Please enter a valid admin email."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
+  email: z.email("Vui lòng nhập email quản trị hợp lệ."),
+  password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự."),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -21,7 +21,8 @@ export function LoginPage() {
   const location = useLocation();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const setAdmin = useAuthStore((state) => state.setAdmin);
-  const from = (location.state as { from?: Location })?.from?.pathname ?? "/dashboard";
+  const from =
+    (location.state as { from?: Location })?.from?.pathname ?? "/dashboard";
 
   const {
     register,
@@ -29,10 +30,7 @@ export function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
 
   const loginMutation = useMutation({
@@ -47,29 +45,40 @@ export function LoginPage() {
   const errorMessage =
     loginMutation.error instanceof Error
       ? loginMutation.error.message
-      : "Unable to sign in with the provided credentials.";
+      : "Không thể đăng nhập với thông tin đã cung cấp.";
 
   return (
-    <main className="login-page">
-      <section className="login-panel">
-        <div className="eyebrow">CareerGraph operations</div>
-        <h1>Admin control center</h1>
-        <p className="lead">
-          Sign in with an administrator account to review company verification
-          traffic, access audit context, and operate from a protected shell.
+    <main
+      className="grid min-h-screen items-center justify-center gap-6 p-8
+        grid-cols-[minmax(0,560px)_minmax(280px,420px)] max-[1100px]:grid-cols-1"
+    >
+      <section
+        className="rounded-[1.6rem] border border-[rgba(127,150,186,0.14)]
+          bg-gradient-to-b from-[rgba(13,24,41,0.94)] to-[rgba(8,15,27,0.9)]
+          p-8 shadow-[0_28px_80px_rgba(0,0,0,0.28)] max-[720px]:px-4"
+      >
+        <div className="text-[#8fc8ff] text-[0.8rem] font-bold tracking-[0.14em] uppercase">
+          Vận hành CareerGraph
+        </div>
+        <h1 className="mt-1 mb-2 text-[clamp(1.9rem,3vw,2.5rem)] tracking-[-0.04em]">
+          Trung tâm điều hành
+        </h1>
+        <p className="text-[#aeb9ca]">
+          Đăng nhập bằng tài khoản quản trị viên để xét duyệt yêu cầu xác thực
+          doanh nghiệp, truy cập ngữ cảnh kiểm toán và vận hành từ shell bảo mật.
         </p>
 
-        <div className="login-meta">
+        <div className="flex flex-wrap gap-3 my-4 text-[#8ea0bb] text-[0.86rem]">
           <span>API: {env.apiBaseUrl}</span>
-          <span>Role locked to ADMIN</span>
+          <span>Chỉ dành cho vai trò ADMIN</span>
         </div>
 
         <form
-          className="stack-lg"
+          className="flex flex-col gap-4"
           onSubmit={handleSubmit((values) => loginMutation.mutate(values))}
         >
           <Input
-            label="Admin email"
+            label="Email quản trị"
             type="email"
             placeholder="admin@careergraph.vn"
             error={errors.email?.message}
@@ -78,37 +87,25 @@ export function LoginPage() {
           />
 
           <Input
-            label="Password"
+            label="Mật khẩu"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Nhập mật khẩu của bạn"
             error={errors.password?.message}
             autoComplete="current-password"
             {...register("password")}
           />
 
           {loginMutation.isError ? (
-            <div className="inline-error" role="alert">
+            <div className="text-[#ff9dad] text-[0.85rem]" role="alert">
               {errorMessage}
             </div>
           ) : null}
 
           <Button type="submit" loading={loginMutation.isPending}>
-            Sign in to admin
+            Đăng nhập
           </Button>
         </form>
       </section>
-
-      {/* <section className="login-aside">
-        <div className="surface-card">
-          <div className="eyebrow">Phase 2 scope</div>
-          <h2>Foundation only</h2>
-          <p>
-            This scaffold wires routing, guards, API access, layout, and shared
-            primitives so Phase 3 can focus on verification workflows instead of
-            app plumbing.
-          </p>
-        </div>
-      </section> */}
     </main>
   );
 }

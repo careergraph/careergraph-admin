@@ -13,9 +13,7 @@ import { companyVerificationApi } from "@/features/company-verification/api/comp
 import { DecisionDialog } from "@/features/company-verification/components/DecisionDialog";
 import { DocumentViewer } from "@/features/company-verification/components/DocumentViewer";
 import { VerificationSummaryPanel } from "@/features/company-verification/components/VerificationSummaryPanel";
-import type {
-  VerificationDocument,
-} from "@/features/company-verification/types";
+import type { VerificationDocument } from "@/features/company-verification/types";
 import { adminCompanyApi } from "@/features/companies/api/adminCompanyApi";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { SurfaceCard } from "@/shared/components/SurfaceCard";
@@ -23,30 +21,21 @@ import { StatusBadge } from "@/shared/components/StatusBadge";
 import { Button } from "@/shared/components/ui/Button";
 
 const formatDateTime = (value: string | null) => {
-  if (!value) {
-    return "Not available";
-  }
-
-  return new Intl.DateTimeFormat("en-GB", {
+  if (!value) return "Không có dữ liệu";
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
 };
 
-type ActiveDialog =
-  | "approve"
-  | "reject"
-  | "needs-info"
-  | "block"
-  | null;
+type ActiveDialog = "approve" | "reject" | "needs-info" | "block" | null;
 
 export function VerificationDetailPage() {
   const { requestId = "" } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeDialog, setActiveDialog] = useState<ActiveDialog>(null);
-  const [activeDocument, setActiveDocument] =
-    useState<VerificationDocument | null>(null);
+  const [activeDocument, setActiveDocument] = useState<VerificationDocument | null>(null);
 
   const detailQuery = useQuery({
     queryFn: () => companyVerificationApi.getDetail(requestId),
@@ -60,15 +49,11 @@ export function VerificationDetailPage() {
       action: Exclude<ActiveDialog, "block" | null>;
       note: string;
     }) => {
-      if (payload.action === "approve") {
+      if (payload.action === "approve")
         return companyVerificationApi.approve(requestId, { note: payload.note });
-      }
-      if (payload.action === "reject") {
+      if (payload.action === "reject")
         return companyVerificationApi.reject(requestId, { note: payload.note });
-      }
-      return companyVerificationApi.requestAdditionalInfo(requestId, {
-        note: payload.note,
-      });
+      return companyVerificationApi.requestAdditionalInfo(requestId, { note: payload.note });
     },
     onSuccess: async (updatedDetail) => {
       queryClient.setQueryData(["verification-detail", requestId], updatedDetail);
@@ -92,21 +77,29 @@ export function VerificationDetailPage() {
     detail.verificationStatus === "APPROVED" ||
     detail.operationalStatus === "BLOCKED";
 
+  const timelineItems = detail
+    ? [
+        { label: "Nộp vào hàng đợi", value: formatDateTime(detail.submittedAt) },
+        { label: "Cập nhật review lần cuối", value: formatDateTime(detail.reviewedAt) },
+        { label: "Ghi chú admin", value: detail.adminNote ?? "Chưa có ghi chú admin." },
+        { label: "Lý do khóa", value: detail.blockReason ?? "Công ty chưa bị khóa." },
+      ]
+    : [];
+
   return (
-    <div className="page-stack">
+    <div className="flex flex-col gap-5">
       <PageHeader
-        eyebrow="Verification detail"
-        title={detail?.companyName || "Verification workspace"}
-        description={`Request ${requestId} review workspace for evidence inspection, moderation decisions, and company enforcement.`}
+        eyebrow="Chi tiết xác thực"
+        title={detail?.companyName ?? "Không gian xét duyệt"}
+        description={`Không gian review yêu cầu ${requestId} để kiểm tra bằng chứng, ra quyết định kiểm duyệt và thực thi doanh nghiệp.`}
       />
 
       {detailQuery.isLoading ? (
         <SurfaceCard>
-          <div className="empty-state">
-            <h3>Loading verification request...</h3>
-            <p className="surface-copy">
-              Pulling the latest request snapshot, status, and uploaded
-              documents.
+          <div className="grid place-items-center min-h-[220px] text-center gap-2">
+            <h3 className="text-lg font-semibold">Đang tải yêu cầu xác thực...</h3>
+            <p className="text-[#aeb9ca] text-sm">
+              Đang lấy ảnh chụp mới nhất, trạng thái và tài liệu đã tải lên.
             </p>
           </div>
         </SurfaceCard>
@@ -114,50 +107,49 @@ export function VerificationDetailPage() {
 
       {detailQuery.isError ? (
         <SurfaceCard>
-          <div className="empty-state compact-empty-state">
-            <AlertTriangle size={18} />
-            <div>
-              <h3>Verification request could not be loaded.</h3>
-              <p className="surface-copy">
-                The request may no longer exist, or the admin API is currently
-                unavailable.
-              </p>
-            </div>
+          <div className="grid place-items-center min-h-[140px] text-center gap-2">
+            <AlertTriangle size={18} className="text-[#ff9dad]" />
+            <h3 className="text-lg font-semibold">Không thể tải yêu cầu xác thực.</h3>
+            <p className="text-[#aeb9ca] text-sm">
+              Yêu cầu có thể không còn tồn tại hoặc API quản trị đang không khả dụng.
+            </p>
           </div>
         </SurfaceCard>
       ) : null}
 
       {detail ? (
         <>
-          <div className="two-column-grid">
+          <div className="grid grid-cols-2 gap-4 max-[1100px]:grid-cols-1">
             <VerificationSummaryPanel detail={detail} />
 
             <SurfaceCard>
-              <div className="panel-title-row">
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="muted-label">Moderation actions</p>
-                  <h3>Decision controls</h3>
+                  <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                    Hành động kiểm duyệt
+                  </p>
+                  <h3 className="text-lg font-bold mt-0.5">Điều khiển quyết định</h3>
                 </div>
                 <StatusBadge status={detail.verificationStatus} />
               </div>
 
-              <div className="action-grid">
+              <div className="grid grid-cols-2 gap-3 max-[720px]:grid-cols-1">
                 <Button
                   disabled={actionDisabled}
                   onClick={() => setActiveDialog("approve")}
                   type="button"
                 >
                   <CheckCheck size={16} />
-                  Approve
+                  Phê duyệt
                 </Button>
                 <Button
-                  className="button-danger"
+                  variant="danger"
                   disabled={!detail || detail.operationalStatus === "BLOCKED"}
                   onClick={() => setActiveDialog("reject")}
                   type="button"
                 >
                   <XCircle size={16} />
-                  Reject
+                  Từ chối
                 </Button>
                 <Button
                   disabled={detail.operationalStatus === "BLOCKED"}
@@ -166,27 +158,25 @@ export function VerificationDetailPage() {
                   variant="secondary"
                 >
                   <Info size={16} />
-                  Request info
+                  Yêu cầu bổ sung
                 </Button>
                 <Button
-                  className="button-danger"
+                  variant="danger"
                   disabled={detail.operationalStatus === "BLOCKED"}
                   onClick={() => setActiveDialog("block")}
                   type="button"
-                  variant="secondary"
                 >
                   <ShieldBan size={16} />
-                  Block company
+                  Khóa công ty
                 </Button>
               </div>
 
-              <p className="surface-copy">
-                Approve is disabled after the company is already approved or
-                blocked. Reject and request-info remain available while the
-                request is still part of an active review cycle.
+              <p className="text-[#aeb9ca] text-sm">
+                Phê duyệt bị vô hiệu sau khi công ty đã duyệt hoặc bị khóa. Từ chối
+                và yêu cầu bổ sung vẫn khả dụng trong chu kỳ review đang hoạt động.
               </p>
 
-              <div className="inline-actions">
+              <div>
                 <Button
                   onClick={() =>
                     navigate(
@@ -197,101 +187,87 @@ export function VerificationDetailPage() {
                   type="button"
                   variant="ghost"
                 >
-                  Open company control
+                  Mở kiểm soát công ty
                 </Button>
               </div>
             </SurfaceCard>
           </div>
 
-          <div className="two-column-grid">
+          <div className="grid grid-cols-2 gap-4 max-[1100px]:grid-cols-1">
             <SurfaceCard>
-              <div className="panel-title-row">
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="muted-label">Verification documents</p>
-                  <h3>Evidence submitted</h3>
+                  <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                    Tài liệu xác thực
+                  </p>
+                  <h3 className="text-lg font-bold mt-0.5">Bằng chứng đã nộp</h3>
                 </div>
-                <span className="icon-chip">
+                <span
+                  className="inline-grid h-10 w-10 shrink-0 place-items-center rounded-[0.9rem]
+                    bg-[rgba(42,78,151,0.3)] text-[#cde0ff]"
+                >
                   <FileText size={18} />
                 </span>
               </div>
 
               {detail.documents.length > 0 ? (
-                <div className="document-list">
-                  {detail.documents.map((document) => (
+                <div className="grid gap-3.5">
+                  {detail.documents.map((doc) => (
                     <button
-                      className="document-card"
-                      key={document.id}
-                      onClick={() => setActiveDocument(document)}
+                      key={doc.id}
+                      className="flex items-center justify-between gap-4 w-full p-4
+                        rounded-2xl border border-[rgba(127,150,186,0.14)]
+                        bg-[rgba(14,23,39,0.85)] text-left cursor-pointer
+                        transition-all duration-150
+                        hover:border-[rgba(130,177,255,0.4)] hover:-translate-y-px"
+                      onClick={() => setActiveDocument(doc)}
                       type="button"
                     >
                       <div>
-                        <p className="document-title">
-                          {document.originalFileName}
-                        </p>
-                        <p className="surface-copy">
-                          {document.documentType || "Verification document"}
+                        <p className="font-bold text-sm">{doc.originalFileName}</p>
+                        <p className="text-[#aeb9ca] text-sm mt-0.5">
+                          {doc.documentType ?? "Tài liệu xác thực"}
                         </p>
                       </div>
-                      <span className="document-meta">
-                        {document.mimeType || "Unknown format"}
+                      <span className="text-[#90a1bb] text-[0.82rem] shrink-0">
+                        {doc.mimeType ?? "Không rõ định dạng"}
                       </span>
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="empty-state compact-empty-state">
-                  <h3>No documents were attached.</h3>
-                  <p className="surface-copy">
-                    This request currently has no uploaded evidence to preview.
+                <div className="grid place-items-center min-h-[140px] text-center gap-2">
+                  <h3 className="text-lg font-semibold">Chưa đính kèm tài liệu.</h3>
+                  <p className="text-[#aeb9ca] text-sm">
+                    Yêu cầu này hiện chưa có bằng chứng nào để xem trước.
                   </p>
                 </div>
               )}
             </SurfaceCard>
 
             <SurfaceCard>
-              <div className="panel-title-row">
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="muted-label">Audit and notes</p>
-                  <h3>Review context</h3>
+                  <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                    Kiểm toán và ghi chú
+                  </p>
+                  <h3 className="text-lg font-bold mt-0.5">Ngữ cảnh xét duyệt</h3>
                 </div>
               </div>
-              <div className="timeline-list">
-                <div className="timeline-item">
-                  <div className="timeline-dot" />
-                  <div>
-                    <p className="timeline-title">Submitted to queue</p>
-                    <p className="surface-copy">
-                      {formatDateTime(detail.submittedAt)}
-                    </p>
+              <div className="grid gap-3.5">
+                {timelineItems.map((item) => (
+                  <div key={item.label} className="grid grid-cols-[18px_minmax(0,1fr)] gap-3">
+                    <div
+                      className="w-3 h-3 mt-1 rounded-full shrink-0
+                        bg-gradient-to-br from-[#4372f0] to-[#1d9a8b]
+                        shadow-[0_0_0_6px_rgba(67,114,240,0.12)]"
+                    />
+                    <div>
+                      <p className="font-bold text-sm">{item.label}</p>
+                      <p className="text-[#aeb9ca] text-sm mt-0.5">{item.value}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-dot" />
-                  <div>
-                    <p className="timeline-title">Last review update</p>
-                    <p className="surface-copy">
-                      {formatDateTime(detail.reviewedAt)}
-                    </p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-dot" />
-                  <div>
-                    <p className="timeline-title">Admin note</p>
-                    <p className="surface-copy">
-                      {detail.adminNote || "No admin note recorded yet."}
-                    </p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-dot" />
-                  <div>
-                    <p className="timeline-title">Block reason</p>
-                    <p className="surface-copy">
-                      {detail.blockReason || "Company is not currently blocked."}
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </SurfaceCard>
           </div>
@@ -299,55 +275,55 @@ export function VerificationDetailPage() {
       ) : null}
 
       <DecisionDialog
-        confirmLabel="Approve request"
-        description="Approval will mark the company verification as approved and may unlock protected HR actions."
+        confirmLabel="Phê duyệt yêu cầu"
+        description="Phê duyệt sẽ đánh dấu xác thực công ty là đã duyệt và có thể mở khóa các hành động HR được bảo vệ."
         loading={decisionMutation.isPending && activeDialog === "approve"}
         onClose={() => setActiveDialog(null)}
         onConfirm={(value) =>
           decisionMutation.mutateAsync({ action: "approve", note: value })
         }
         open={activeDialog === "approve"}
-        placeholder="Optional approval note or audit context."
+        placeholder="Ghi chú phê duyệt hoặc ngữ cảnh kiểm toán (tùy chọn)."
         required={false}
-        title="Approve verification request"
+        title="Phê duyệt yêu cầu xác thực"
       />
 
       <DecisionDialog
-        confirmLabel="Reject request"
-        description="A rejection reason is required so the HR team understands what must be corrected."
+        confirmLabel="Từ chối yêu cầu"
+        description="Lý do từ chối là bắt buộc để đội HR hiểu điều gì cần sửa chữa."
         loading={decisionMutation.isPending && activeDialog === "reject"}
         onClose={() => setActiveDialog(null)}
         onConfirm={(value) =>
           decisionMutation.mutateAsync({ action: "reject", note: value })
         }
         open={activeDialog === "reject"}
-        placeholder="Describe the reason for rejecting this verification request."
-        title="Reject verification request"
+        placeholder="Mô tả lý do từ chối yêu cầu xác thực này."
+        title="Từ chối yêu cầu xác thực"
         tone="danger"
       />
 
       <DecisionDialog
-        confirmLabel="Request additional info"
-        description="Use this when the company can continue the verification cycle but must provide clearer or missing evidence."
+        confirmLabel="Gửi yêu cầu bổ sung"
+        description="Sử dụng khi công ty có thể tiếp tục chu kỳ xác thực nhưng phải cung cấp bằng chứng rõ ràng hơn."
         loading={decisionMutation.isPending && activeDialog === "needs-info"}
         onClose={() => setActiveDialog(null)}
         onConfirm={(value) =>
           decisionMutation.mutateAsync({ action: "needs-info", note: value })
         }
         open={activeDialog === "needs-info"}
-        placeholder="List the missing documents or corrections the HR team must provide."
-        title="Request additional information"
+        placeholder="Liệt kê các tài liệu thiếu hoặc nội dung đội HR phải bổ sung."
+        title="Yêu cầu bổ sung thông tin"
       />
 
       <DecisionDialog
-        confirmLabel="Block company"
-        description="Blocking is an enforcement action and requires a clear, reviewable reason."
+        confirmLabel="Khóa công ty"
+        description="Khóa là hành động thực thi và yêu cầu lý do rõ ràng, có thể xem xét lại."
         loading={companyMutation.isPending && activeDialog === "block"}
         onClose={() => setActiveDialog(null)}
         onConfirm={(value) => companyMutation.mutateAsync(value)}
         open={activeDialog === "block"}
-        placeholder="Document the policy, compliance, or trust-and-safety reason for blocking this company."
-        title="Block company"
+        placeholder="Ghi rõ lý do chính sách, tuân thủ hoặc an toàn khi khóa công ty này."
+        title="Khóa công ty"
         tone="danger"
       />
 

@@ -11,12 +11,18 @@ import { Input } from "@/shared/components/ui/Input";
 import type { AdminCompanyListQuery } from "@/features/companies/api/adminCompanyApi";
 
 const formatDate = (value: string | null) => {
-  if (!value) return "Never";
-  return new Intl.DateTimeFormat("en-GB", {
+  if (!value) return "Chưa có";
+  return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
 };
+
+const inputSelectClass =
+  "w-full min-h-[3rem] px-[0.95rem] py-[0.85rem] rounded-[0.95rem] " +
+  "border border-[rgba(125,147,184,0.16)] bg-[rgba(6,13,25,0.55)] text-[#eff4ff] " +
+  "outline-none transition-all duration-150 " +
+  "focus:border-[rgba(130,177,255,0.65)] focus:shadow-[0_0_0_3px_rgba(67,114,240,0.18)]";
 
 export function CompanyListPage() {
   const [filters, setFilters] = useState<AdminCompanyListQuery>({
@@ -36,77 +42,77 @@ export function CompanyListPage() {
   const page = companiesQuery.data;
 
   return (
-    <div className="page-stack">
+    <div className="flex flex-col gap-5">
       <PageHeader
-        eyebrow="Management"
-        title="Companies overview"
-        description="Monitor company verification status, operational state, and verification history across all onboarded businesses."
+        eyebrow="Quản lý"
+        title="Tổng quan doanh nghiệp"
+        description="Giám sát trạng thái xác thực, tình trạng vận hành và lịch sử xác thực của tất cả doanh nghiệp đã đăng ký."
       />
 
-      <section className="filter-grid">
+      <section className="grid gap-4 grid-cols-[minmax(0,2.2fr)_minmax(280px,1fr)] max-[1100px]:grid-cols-1">
         <SurfaceCard>
-          <div className="filter-toolbar">
+          <div className="flex items-end gap-3 flex-wrap max-[720px]:flex-col max-[720px]:items-stretch">
             <Input
-              label="Search company"
-              onChange={(event) => setDraftQuery(event.target.value)}
-              placeholder="Company name, tax code, or HR email..."
+              label="Tìm kiếm công ty"
+              onChange={(e) => setDraftQuery(e.target.value)}
+              placeholder="Tên công ty, mã số thuế hoặc email HR..."
               value={draftQuery}
             />
-            <label className="field">
-              <span className="field-label">Verification Status</span>
+            <label className="flex flex-col gap-1.5 min-w-[180px]">
+              <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">
+                Trạng thái xác thực
+              </span>
               <select
-                className="select"
-                onChange={(event) =>
-                  setFilters((current) => ({
-                    ...current,
+                className={inputSelectClass}
+                onChange={(e) =>
+                  setFilters((cur) => ({
+                    ...cur,
                     page: 0,
-                    verificationStatus: event.target.value || undefined,
+                    verificationStatus: e.target.value || undefined,
                   }))
                 }
-                value={filters.verificationStatus || ""}
+                value={filters.verificationStatus ?? ""}
               >
-                <option value="">All statuses</option>
-                <option value="NOT_SUBMITTED">Not submitted</option>
-                <option value="PENDING_REVIEW">Pending review</option>
-                <option value="APPROVED">Approved</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="NEEDS_ADDITIONAL_INFO">Needs info</option>
+                <option value="">Tất cả trạng thái</option>
+                <option value="NOT_SUBMITTED">Chưa nộp</option>
+                <option value="PENDING_REVIEW">Chờ xét duyệt</option>
+                <option value="APPROVED">Đã duyệt</option>
+                <option value="REJECTED">Từ chối</option>
+                <option value="NEEDS_ADDITIONAL_INFO">Cần bổ sung</option>
               </select>
             </label>
-            <label className="field">
-              <span className="field-label">Operational Status</span>
+            <label className="flex flex-col gap-1.5 min-w-[180px]">
+              <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">
+                Trạng thái vận hành
+              </span>
               <select
-                className="select"
-                onChange={(event) =>
-                  setFilters((current) => ({
-                    ...current,
+                className={inputSelectClass}
+                onChange={(e) =>
+                  setFilters((cur) => ({
+                    ...cur,
                     page: 0,
-                    operationalStatus: event.target.value || undefined,
+                    operationalStatus: e.target.value || undefined,
                   }))
                 }
-                value={filters.operationalStatus || ""}
+                value={filters.operationalStatus ?? ""}
               >
-                <option value="">All states</option>
-                <option value="ACTIVE">Active</option>
-                <option value="SUSPENDED">Suspended</option>
-                <option value="BLOCKED">Blocked</option>
+                <option value="">Tất cả trạng thái</option>
+                <option value="ACTIVE">Đang hoạt động</option>
+                <option value="SUSPENDED">Tạm dừng</option>
+                <option value="BLOCKED">Đã khóa</option>
               </select>
             </label>
           </div>
 
-          <div className="inline-actions">
+          <div className="flex flex-wrap gap-3 max-[720px]:flex-col">
             <Button
               onClick={() =>
-                setFilters((current) => ({
-                  ...current,
-                  page: 0,
-                  query: draftQuery.trim(),
-                }))
+                setFilters((cur) => ({ ...cur, page: 0, query: draftQuery.trim() }))
               }
               type="button"
             >
               <Search size={16} />
-              Search
+              Tìm kiếm
             </Button>
             <Button
               onClick={() => {
@@ -122,76 +128,98 @@ export function CompanyListPage() {
               type="button"
               variant="ghost"
             >
-              Reset
+              Đặt lại
             </Button>
           </div>
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="panel-title-row">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="muted-label">Total companies</p>
-              <h3>{page?.totalElements ?? 0}</h3>
+              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
+                Tổng số công ty
+              </p>
+              <h3 className="text-2xl font-bold mt-1">{page?.totalElements ?? 0}</h3>
             </div>
           </div>
-          <p className="surface-copy">
-            Companies registered and under monitoring. Click any row to view verification requests and
-            control enforcement actions.
+          <p className="text-[#aeb9ca] text-sm">
+            Doanh nghiệp đã đăng ký và đang được giám sát. Nhấp vào một hàng để xem
+            yêu cầu xác thực và điều khiển thực thi.
           </p>
         </SurfaceCard>
       </section>
 
       <SurfaceCard>
-        <div className="table-shell">
+        <div className="overflow-x-auto">
           {companiesQuery.isLoading ? (
-            <div className="empty-state">
-              <h3>Loading companies...</h3>
-              <p className="surface-copy">Fetching company list from backend.</p>
+            <div className="grid place-items-center min-h-[220px] text-center gap-2">
+              <h3 className="text-lg font-semibold">Đang tải danh sách công ty...</h3>
+              <p className="text-[#aeb9ca] text-sm">Đang lấy dữ liệu từ backend.</p>
             </div>
           ) : null}
 
           {companiesQuery.isError ? (
-            <div className="empty-state">
-              <h3>Failed to load companies.</h3>
-              <p className="surface-copy">Please refresh or try again later.</p>
+            <div className="grid place-items-center min-h-[220px] text-center gap-2">
+              <h3 className="text-lg font-semibold">Tải danh sách công ty thất bại.</h3>
+              <p className="text-[#aeb9ca] text-sm">Vui lòng tải lại trang hoặc thử lại sau.</p>
             </div>
           ) : null}
 
           {!companiesQuery.isLoading && !companiesQuery.isError && page && page.content.length > 0 ? (
             <>
-              <table className="data-table">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th>Company</th>
-                    <th>Tax Code</th>
-                    <th>HR Email</th>
-                    <th>Verification</th>
-                    <th>Status</th>
-                    <th>Submitted</th>
-                    <th>Requests</th>
-                    <th>Action</th>
+                    {[
+                      "Công ty",
+                      "Mã số thuế",
+                      "Email HR",
+                      "Xác thực",
+                      "Vận hành",
+                      "Ngày nộp",
+                      "Yêu cầu",
+                      "Thao tác",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="py-[0.95rem] px-3 text-left border-b border-[rgba(142,160,186,0.11)]
+                          text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em] font-semibold"
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
                   {page.content.map((row) => (
-                    <tr key={row.companyId}>
-                      <td>{row.companyName}</td>
-                      <td>{row.taxCode || "—"}</td>
-                      <td>{row.hrEmail || "—"}</td>
-                      <td>
+                    <tr key={row.companyId} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] font-medium">
+                        {row.companyName}
+                      </td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] font-mono text-sm">
+                        {row.taxCode ?? "—"}
+                      </td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] text-[#aeb9ca] text-sm">
+                        {row.hrEmail ?? "—"}
+                      </td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)]">
                         <StatusBadge status={row.verificationStatus} />
                       </td>
-                      <td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)]">
                         <StatusBadge status={row.operationalStatus} />
                       </td>
-                      <td>{formatDate(row.submittedAt)}</td>
-                      <td className="mono-text">{row.totalRequests}</td>
-                      <td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] text-sm text-[#aeb9ca]">
+                        {formatDate(row.submittedAt)}
+                      </td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)] font-mono text-sm">
+                        {row.totalRequests}
+                      </td>
+                      <td className="py-[0.95rem] px-3 border-b border-[rgba(142,160,186,0.11)]">
                         <Link
-                          className="inline-link"
+                          className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
                           to={`/companies/${row.companyId}`}
                         >
-                          Open control <ArrowRight size={14} />
+                          Xem chi tiết <ArrowRight size={14} />
                         </Link>
                       </td>
                     </tr>
@@ -199,36 +227,33 @@ export function CompanyListPage() {
                 </tbody>
               </table>
 
-              <div className="pagination-row">
-                <p className="surface-copy">
-                  Page {page.number + 1} of {Math.max(1, page.totalPages)}
+              <div className="flex items-center justify-between gap-3 mt-4 max-[720px]:flex-col max-[720px]:items-stretch">
+                <p className="text-[#aeb9ca] text-sm">
+                  Trang {page.number + 1} / {Math.max(1, page.totalPages)}
                 </p>
-                <div className="inline-actions">
+                <div className="flex flex-wrap gap-3 max-[720px]:flex-col">
                   <Button
                     disabled={page.number === 0}
                     onClick={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        page: Math.max(0, (current.page ?? 0) - 1),
+                      setFilters((cur) => ({
+                        ...cur,
+                        page: Math.max(0, (cur.page ?? 0) - 1),
                       }))
                     }
                     type="button"
                     variant="secondary"
                   >
-                    Previous
+                    Trang trước
                   </Button>
                   <Button
                     disabled={page.number + 1 >= page.totalPages}
                     onClick={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        page: (current.page ?? 0) + 1,
-                      }))
+                      setFilters((cur) => ({ ...cur, page: (cur.page ?? 0) + 1 }))
                     }
                     type="button"
                     variant="secondary"
                   >
-                    Next
+                    Trang sau
                   </Button>
                 </div>
               </div>
@@ -239,10 +264,10 @@ export function CompanyListPage() {
           !companiesQuery.isError &&
           page &&
           page.content.length === 0 ? (
-            <div className="empty-state">
-              <h3>No companies found.</h3>
-              <p className="surface-copy">
-                Try adjusting your filters or search query.
+            <div className="grid place-items-center min-h-[220px] text-center gap-2">
+              <h3 className="text-lg font-semibold">Không tìm thấy công ty nào.</h3>
+              <p className="text-[#aeb9ca] text-sm">
+                Thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm.
               </p>
             </div>
           ) : null}
