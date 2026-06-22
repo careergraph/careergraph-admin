@@ -17,28 +17,28 @@ export function DashboardPage() {
 
   const dashboardStats = [
     {
-      label: "Chờ xác thực",
+      label: "Hồ sơ chờ xử lý",
       value: summary?.pendingVerification ?? "--",
       icon: TimerReset,
-      hint: "Số yêu cầu đang chờ admin xử lý trong hàng đợi xác thực.",
+      hint: "Số hồ sơ xác thực đang chờ bộ phận quản trị xem xét.",
     },
     {
-      label: "Đã duyệt hôm nay",
+      label: "Đã xử lý hôm nay",
       value: summary?.reviewedToday ?? "--",
       icon: ShieldCheck,
-      hint: "Tổng số hồ sơ đã được review trong ngày hiện tại.",
+      hint: "Tổng số hồ sơ đã được xử lý trong ngày làm việc hiện tại.",
     },
     {
-      label: "Công ty giám sát",
+      label: "Doanh nghiệp theo dõi",
       value: summary?.companiesMonitored ?? "--",
       icon: Building2,
-      hint: "Tổng doanh nghiệp đang nằm trong phạm vi giám sát vận hành.",
+      hint: "Tổng số doanh nghiệp đang nằm trong phạm vi theo dõi vận hành.",
     },
     {
-      label: "Sự cố chính sách",
+      label: "Cảnh báo tuân thủ",
       value: summary?.policyIncidents ?? "--",
       icon: Activity,
-      hint: "Số doanh nghiệp đang bị khóa hoặc tạm dừng.",
+      hint: "Số doanh nghiệp đang bị khóa hoặc tạm dừng để xử lý rủi ro vận hành.",
     },
   ];
 
@@ -47,7 +47,7 @@ export function DashboardPage() {
       <PageHeader
         eyebrow="Tổng quan"
         title="Trung tâm điều hành"
-        description={`Đăng nhập với ${admin?.email ?? "quản trị viên"}. Không gian sẵn sàng cho hàng đợi xác thực và công cụ kiểm soát doanh nghiệp.`}
+        description={`Đăng nhập với ${admin?.email ?? "quản trị viên"}. Theo dõi hồ sơ xác thực, trạng thái doanh nghiệp và các cảnh báo vận hành trên cùng một màn hình.`}
       />
 
       <section className="grid grid-cols-4 gap-4 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1">
@@ -77,9 +77,9 @@ export function DashboardPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
-                Điểm tích hợp hàng đợi
+                Danh sách chờ xử lý
               </p>
-              <h3 className="text-lg font-bold mt-0.5">Tiếp nhận xác thực</h3>
+              <h3 className="text-lg font-bold mt-0.5">Hồ sơ xác thực mới nhất</h3>
             </div>
           </div>
           {summaryQuery.isLoading ? (
@@ -109,7 +109,7 @@ export function DashboardPage() {
                       className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
                       to={`/verification/${request.requestId}`}
                     >
-                      Mở hồ sơ review
+                      Mở hồ sơ xét duyệt
                     </Link>
                   </div>
                 </div>
@@ -126,21 +126,21 @@ export function DashboardPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
-                Điểm tích hợp chế tài
+                Điều phối doanh nghiệp
               </p>
-              <h3 className="text-lg font-bold mt-0.5">Kiểm soát doanh nghiệp</h3>
+              <h3 className="text-lg font-bold mt-0.5">Quản lý trạng thái doanh nghiệp</h3>
             </div>
           </div>
           <p className="text-[#aeb9ca] text-sm">
-            Admin có thể mở trang doanh nghiệp để khóa, mở khóa và xem lịch sử xác
-            thực mà không cần đi qua request detail.
+            Truy cập nhanh danh sách doanh nghiệp để rà soát trạng thái xác thực,
+            khóa hoặc mở khóa tài khoản khi cần thiết.
           </p>
           <div>
             <Link
               className="inline-flex items-center gap-1.5 text-[#91b7ff] text-sm hover:underline"
               to="/companies/company-control"
             >
-              Mở trung tâm quản lý công ty
+              Mở trang quản lý doanh nghiệp
             </Link>
           </div>
         </SurfaceCard>
