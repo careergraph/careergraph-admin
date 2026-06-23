@@ -72,10 +72,10 @@ export function VerificationDetailPage() {
     },
   });
 
-  const actionDisabled =
-    !detail ||
-    detail.verificationStatus === "APPROVED" ||
-    detail.operationalStatus === "BLOCKED";
+  const canReviewPendingRequest =
+    detail?.verificationStatus === "PENDING_REVIEW" &&
+    detail?.operationalStatus !== "BLOCKED";
+  const canBlockCompany = detail?.operationalStatus !== "BLOCKED";
 
   const timelineItems = detail
     ? [
@@ -90,8 +90,8 @@ export function VerificationDetailPage() {
     <div className="flex flex-col gap-5">
       <PageHeader
         eyebrow="Chi tiết xác thực"
-        title={detail?.companyName ?? "Không gian xét duyệt"}
-        description={`Không gian review yêu cầu ${requestId} để kiểm tra bằng chứng, ra quyết định kiểm duyệt và thực thi doanh nghiệp.`}
+        title={detail?.companyName ?? "Hồ sơ xác thực doanh nghiệp"}
+        description={`Theo dõi hồ sơ ${requestId}, kiểm tra tài liệu đã nộp và ghi nhận quyết định xét duyệt theo đúng quy trình quản trị.`}
       />
 
       {detailQuery.isLoading ? (
@@ -135,7 +135,7 @@ export function VerificationDetailPage() {
 
               <div className="grid grid-cols-2 gap-3 max-[720px]:grid-cols-1">
                 <Button
-                  disabled={actionDisabled}
+                  disabled={!canReviewPendingRequest}
                   onClick={() => setActiveDialog("approve")}
                   type="button"
                 >
@@ -144,7 +144,7 @@ export function VerificationDetailPage() {
                 </Button>
                 <Button
                   variant="danger"
-                  disabled={!detail || detail.operationalStatus === "BLOCKED"}
+                  disabled={!canReviewPendingRequest}
                   onClick={() => setActiveDialog("reject")}
                   type="button"
                 >
@@ -152,7 +152,7 @@ export function VerificationDetailPage() {
                   Từ chối
                 </Button>
                 <Button
-                  disabled={detail.operationalStatus === "BLOCKED"}
+                  disabled={!canReviewPendingRequest}
                   onClick={() => setActiveDialog("needs-info")}
                   type="button"
                   variant="secondary"
@@ -162,7 +162,7 @@ export function VerificationDetailPage() {
                 </Button>
                 <Button
                   variant="danger"
-                  disabled={detail.operationalStatus === "BLOCKED"}
+                  disabled={!canBlockCompany}
                   onClick={() => setActiveDialog("block")}
                   type="button"
                 >
@@ -172,8 +172,8 @@ export function VerificationDetailPage() {
               </div>
 
               <p className="text-[#aeb9ca] text-sm">
-                Phê duyệt bị vô hiệu sau khi công ty đã duyệt hoặc bị khóa. Từ chối
-                và yêu cầu bổ sung vẫn khả dụng trong chu kỳ review đang hoạt động.
+                Các quyết định xét duyệt chỉ khả dụng khi hồ sơ đang ở trạng thái chờ xử lý.
+                Sau khi đã có kết luận, chỉ nên sử dụng các thao tác quản trị như khóa công ty khi thực sự cần thiết.
               </p>
 
               <div>
@@ -186,8 +186,8 @@ export function VerificationDetailPage() {
                   }
                   type="button"
                   variant="ghost"
-                >
-                  Mở kiểm soát công ty
+                  >
+                  Mở hồ sơ doanh nghiệp
                 </Button>
               </div>
             </SurfaceCard>
