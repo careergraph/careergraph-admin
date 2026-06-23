@@ -143,40 +143,23 @@ export function CompanyListPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-[1rem] border border-[rgba(127,150,186,0.14)] bg-[rgba(255,255,255,0.02)] px-4 py-3 text-sm text-[#aeb9ca]">
-              <span>
-                Từ khóa hiện tại:{" "}
-                <span className="font-semibold text-[#dbe4f4]">{filters.query || "Chưa áp dụng"}</span>
-              </span>
-              <span>
-                Trạng thái xác thực:{" "}
-                <span className="font-semibold text-[#dbe4f4]">
-                  {filters.verificationStatus || "Tất cả"}
-                </span>
-              </span>
-              <span>
-                Trạng thái vận hành:{" "}
-                <span className="font-semibold text-[#dbe4f4]">
-                  {filters.operationalStatus || "Tất cả"}
-                </span>
-              </span>
-            </div>
           </div>
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em]">
-                Tổng số công ty
-              </p>
-              <h3 className="text-2xl font-bold mt-1">{page?.totalElements ?? 0}</h3>
+          <div className="flex flex-col h-full">
+            {/* Title góc trên phải */}
+            <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em] text-left">
+              Tổng số công ty
+            </p>
+
+            {/* Số ở giữa card */}
+            <div className="flex-1 flex items-center justify-center">
+              <h3 className="text-2xl font-bold">
+                {page?.totalElements ?? 0}
+              </h3>
             </div>
           </div>
-          <p className="text-[#aeb9ca] text-sm">
-            Tổng số doanh nghiệp khớp với bộ lọc hiện tại. Mở chi tiết để xem lịch sử
-            xác thực và thực hiện các thao tác quản trị.
-          </p>
         </SurfaceCard>
       </section>
 

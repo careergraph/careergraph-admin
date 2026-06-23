@@ -11,11 +11,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   ref
 ) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">{label}</span>
+    <label className="flex flex-col gap-1.5 pb-1">
+      <span className="text-[#d9e2f1] text-xl font-semibold">{label}</span>
       <input
         className={cn(
-          "w-full min-h-[3rem] px-[0.95rem] py-[0.85rem] rounded-[0.95rem]",
+          "w-full min-h-[3.5rem] px-[0.95rem] py-[0.85rem] rounded-[0.95rem]",
           "border bg-[rgba(6,13,25,0.55)] text-[#eff4ff] outline-none",
           "transition-all duration-150",
           "focus:border-[rgba(130,177,255,0.65)] focus:shadow-[0_0_0_3px_rgba(67,114,240,0.18)]",
@@ -24,6 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             : "border-[rgba(125,147,184,0.16)]",
           className
         )}
+        
         ref={ref}
         {...props}
       />

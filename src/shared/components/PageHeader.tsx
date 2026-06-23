@@ -13,7 +13,7 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
       <h1 className="mt-1 mb-2 text-[clamp(1.9rem,3vw,2.5rem)] tracking-[-0.04em]">
         {title}
       </h1>
-      <p className="text-[#aeb9ca]">{description}</p>
+      {/* <p className="text-[#aeb9ca]">{description}</p> */}
     </header>
   );
 }

@@ -49,32 +49,18 @@ export function LoginPage() {
 
   return (
     <main
-      className="grid min-h-screen items-center justify-center gap-6 p-8
-        grid-cols-[minmax(0,560px)_minmax(280px,420px)] max-[1100px]:grid-cols-1"
+      className="flex min-h-screen items-center justify-center gap-6 p-6 sm:p-8"
     >
       <section
-        className="rounded-[1.6rem] border border-[rgba(127,150,186,0.14)]
+        className="w-full max-w-[40rem] rounded-[1.9rem] border border-[rgba(127,150,186,0.14)]
           bg-gradient-to-b from-[rgba(13,24,41,0.94)] to-[rgba(8,15,27,0.9)]
-          p-8 shadow-[0_28px_80px_rgba(0,0,0,0.28)] max-[720px]:px-4"
+          px-6 py-7 shadow-[0_28px_80px_rgba(0,0,0,0.28)] sm:px-10 sm:py-9"
       >
-        <div className="text-[#8fc8ff] text-[0.8rem] font-bold tracking-[0.14em] uppercase">
-          Vận hành CareerGraph
+        <div className="text-[#8fc8ff] text-4xl font-semibold">
+            CareerGraph Admin
         </div>
-        <h1 className="mt-1 mb-2 text-[clamp(1.9rem,3vw,2.5rem)] tracking-[-0.04em]">
-          Trung tâm điều hành
-        </h1>
-        <p className="text-[#aeb9ca]">
-          Đăng nhập bằng tài khoản quản trị viên để xét duyệt yêu cầu xác thực
-          doanh nghiệp, truy cập ngữ cảnh kiểm toán và vận hành từ shell bảo mật.
-        </p>
-
-        <div className="flex flex-wrap gap-3 my-4 text-[#8ea0bb] text-[0.86rem]">
-          <span>API: {env.apiBaseUrl}</span>
-          <span>Chỉ dành cho vai trò ADMIN</span>
-        </div>
-
         <form
-          className="flex flex-col gap-4"
+          className="mt-4 flex flex-col gap-5"
           onSubmit={handleSubmit((values) => loginMutation.mutate(values))}
         >
           <Input
@@ -83,6 +69,7 @@ export function LoginPage() {
             placeholder="admin@careergraph.vn"
             error={errors.email?.message}
             autoComplete="email"
+            className="min-h-[4.25rem] !text-xl placeholder:!text-xl"
             {...register("email")}
           />
 
@@ -92,16 +79,21 @@ export function LoginPage() {
             placeholder="Nhập mật khẩu của bạn"
             error={errors.password?.message}
             autoComplete="current-password"
+            className="min-h-[4.25rem] !text-xl placeholder:!text-xl"
             {...register("password")}
           />
 
           {loginMutation.isError ? (
-            <div className="text-[#ff9dad] text-[0.85rem]" role="alert">
+            <div className="text-[#ff9dad] text-[0.95rem]" role="alert">
               {errorMessage}
             </div>
           ) : null}
 
-          <Button type="submit" loading={loginMutation.isPending}>
+          <Button
+            type="submit"
+            loading={loginMutation.isPending}
+            className="mt-1 min-h-[3.25rem] text-[1.05rem] font-semibold"
+          >
             Đăng nhập
           </Button>
         </form>
