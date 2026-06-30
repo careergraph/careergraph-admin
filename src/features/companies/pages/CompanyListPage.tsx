@@ -69,7 +69,7 @@ export function CompanyListPage() {
                 value={draftQuery}
               />
               <label className="flex flex-col gap-1.5">
-                <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">
+                <span className="text-[#d9e2f1] text-sm font-semibold">
                   Trạng thái xác thực
                 </span>
                 <select
@@ -92,7 +92,7 @@ export function CompanyListPage() {
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">
+                <span className="text-[#d9e2f1] text-sm font-semibold">
                   Trạng thái vận hành
                 </span>
                 <select
@@ -149,7 +149,7 @@ export function CompanyListPage() {
         <SurfaceCard>
           <div className="flex flex-col h-full">
             {/* Title góc trên phải */}
-            <p className="text-[#90a1bb] text-[0.78rem] uppercase tracking-[0.08em] text-left">
+            <p className="text-[#90a1bb] text-sm uppercase tracking-[0.08em] text-left">
               Tổng số công ty
             </p>
 

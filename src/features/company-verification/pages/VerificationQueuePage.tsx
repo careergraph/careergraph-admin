@@ -86,7 +86,7 @@ export function VerificationQueuePage() {
                 value={draftQuery}
               />
               <label className="flex flex-col gap-1.5">
-                <span className="text-[#d9e2f1] text-[0.92rem] font-semibold">
+                <span className="text-[#d9e2f1] text-sm font-semibold">
                   Lọc trạng thái
                 </span>
                 <select
