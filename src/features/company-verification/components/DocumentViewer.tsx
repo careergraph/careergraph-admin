@@ -63,8 +63,7 @@ export function DocumentViewer({ document, onClose }: DocumentViewerProps) {
               type="button"
               variant="secondary"
             >
-              <Download size={16} />
-              Tải xuống
+              Mở file
             </Button>
             <Button onClick={onClose} type="button" variant="ghost">
               Đóng
@@ -101,7 +100,7 @@ export function DocumentViewer({ document, onClose }: DocumentViewerProps) {
               <h3 className="text-lg font-semibold">Không thể xem trước</h3>
               <p className="text-[#aeb9ca] text-sm">
                 Loại tài liệu này không thể xem trực tiếp trên trình duyệt.
-                Vui lòng nhấn "Tải xuống" để mở bằng ứng dụng phù hợp.
+                Vui lòng nhấn "Mở file" để mở bằng ứng dụng phù hợp.
               </p>
             </div>
           ) : null}
@@ -112,7 +111,7 @@ export function DocumentViewer({ document, onClose }: DocumentViewerProps) {
                 Không hỗ trợ xem trước loại file này.
               </h3>
               <p className="text-[#aeb9ca] text-sm">
-                Nhấn "Tải xuống" để kiểm tra hoặc tải về tài liệu.
+                Nhấn "Mở file" để kiểm tra hoặc mở bằng ứng dụng phù hợp.
               </p>
             </div>
           ) : null}
