@@ -138,6 +138,7 @@ export function VerificationDetailPage() {
                   disabled={!canReviewPendingRequest}
                   onClick={() => setActiveDialog("approve")}
                   type="button"
+                  className="hover:cursor-pointer"
                 >
                   <CheckCheck size={16} />
                   Phê duyệt
@@ -147,6 +148,7 @@ export function VerificationDetailPage() {
                   disabled={!canReviewPendingRequest}
                   onClick={() => setActiveDialog("reject")}
                   type="button"
+                  className="hover:cursor-pointer"
                 >
                   <XCircle size={16} />
                   Từ chối
@@ -156,6 +158,7 @@ export function VerificationDetailPage() {
                   onClick={() => setActiveDialog("needs-info")}
                   type="button"
                   variant="secondary"
+                  className="hover:cursor-pointer"
                 >
                   <Info size={16} />
                   Yêu cầu bổ sung
@@ -165,6 +168,7 @@ export function VerificationDetailPage() {
                   disabled={!canBlockCompany}
                   onClick={() => setActiveDialog("block")}
                   type="button"
+                  className="hover:cursor-pointer"
                 >
                   <ShieldBan size={16} />
                   Khóa công ty
@@ -186,6 +190,7 @@ export function VerificationDetailPage() {
                   }
                   type="button"
                   variant="ghost"
+                  className="hover:cursor-pointer"
                   >
                   Mở hồ sơ doanh nghiệp
                 </Button>

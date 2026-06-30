@@ -78,9 +78,9 @@ export function VerificationQueuePage() {
               </div>
             </div>
 
-            <div className="grid gap-3 grid-cols-[minmax(0,1.8fr)_240px_auto] items-end max-[1200px]:grid-cols-1">
+            <div className="grid gap-3 grid-cols-[minmax(0,1.8fr)_240px_auto] items-end max-[1560px]:grid-cols-1">
               <Input
-                label="Tìm theo công ty, mã số thuế hoặc email HR"
+                label="Tìm kiếm doanh nghiệp"
                 onChange={(e) => setDraftQuery(e.target.value)}
                 placeholder="VD: mã số thuế, tên công ty, hr@company.vn"
                 value={draftQuery}
@@ -107,7 +107,7 @@ export function VerificationQueuePage() {
                   ))}
                 </select>
               </label>
-              <div className="flex gap-3 max-[1200px]:justify-start max-[720px]:flex-col">
+              <div className="flex gap-3 max-[1560px]:justify-start max-[720px]:flex-col">
                 <Button
                   className="min-w-[140px]"
                   onClick={() =>

@@ -61,7 +61,7 @@ export function CompanyListPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 grid-cols-[minmax(0,1.6fr)_220px_220px_auto] items-end max-[1280px]:grid-cols-1">
+            <div className="grid gap-3 grid-cols-[minmax(0,1.6fr)_220px_220px_auto] items-end max-[1560px]:grid-cols-1">
               <Input
                 label="Tìm kiếm doanh nghiệp"
                 onChange={(e) => setDraftQuery(e.target.value)}
